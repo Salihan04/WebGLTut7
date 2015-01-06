@@ -128,20 +128,6 @@
 
 	function handleKeyDown(event) {
 		currentlyPressedKeys[event.keyCode] = true;
-
-		if(String.fromCharCode(event.keyCode) == "F") {
-			filter += 1;
-
-			if(filter == 3)
-				filter = 0;
-
-			filterString = filterString.substring(0, filterString.length - 1);
-			console.log(filterString);
-			filterString += filter;
-			console.log(filterString);
-			document.getElementById("filter").innerHTML = filterString;
-			console.log(document.getElementById("filter").innerHTML);
-		}
  	}
 
  	function handleKeyUp(event) {
@@ -283,16 +269,6 @@
 
         gl.bindTexture(gl.TEXTURE_2D, textures[0]);
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textures[0].image);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-
-        gl.bindTexture(gl.TEXTURE_2D, textures[1]);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textures[1].image);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-
-        gl.bindTexture(gl.TEXTURE_2D, textures[2]);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textures[2].image);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
         gl.generateMipmap(gl.TEXTURE_2D);
@@ -309,11 +285,9 @@
     function initTexture() {
     	var textureImage = new Image();
 
-    	for(var i = 0; i < 3; i++) {
-    		var texture = gl.createTexture();
-    		texture.image = textureImage;
-    		textures.push(texture);
-    	}
+		var texture = gl.createTexture();
+		texture.image = textureImage;
+		textures.push(texture);
 
         textureImage.onload = function () {
             handleLoadedTexture(textures);
@@ -368,7 +342,6 @@
 
 	function webGLStart() {
 		var canvas = document.getElementById("canvas");
-		filterString = document.getElementById("filter").innerHTML;
 
 		initGL(canvas);
 		initShaders();
@@ -390,7 +363,6 @@
 	<header>
 		<h1>WebGL Tut 7</h1>
 		<div>Adding basic directional and ambient lighting using WebGL</div>
-		<div id="filter">Filter Texture: 0</div>
 	</header></br>
 	
 	<article>
@@ -398,11 +370,14 @@
 	</article></br>
 
 	<article>
+		<input type="checkbox" id="lighting" checked /> Use lighting
+	</article></br>	
+
+	<article>
 		<h2>Controls:</h2>
 	    <ul>
 	        <li><code>W</code>/<code>S</code> to zoom out/in
 	        <li>Cursor keys: make the cube rotate (the longer you hold down a cursor key, the more it accelerates)
-	        <li><code>F</code> to toggle through three different kinds of texture filters
 	    </ul>
 	</article>
 	
